@@ -35,7 +35,7 @@ public class DAO {
                 
                 Shiftlist sl = (Shiftlist)it.next();
                 
-                PreparedStatement ps = connection.prepareStatement("Insert to ReportTable(StepID,EmployeeID,EmployeeRole) values(?,?,?,)");
+                PreparedStatement ps = connection.prepareStatement("Insert to EmployeeTable(StepID,EmployeeID,EmployeeRole) values(?,?,?,)");
                 ps.setString(1,sl.getStepId());
                 ps.setString(2, sl.getEmployeeID());
                 ps.setString(3, sl.getEmployeeRole());
