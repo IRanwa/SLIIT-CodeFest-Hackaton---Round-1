@@ -27,7 +27,7 @@ public class Calculations extends Thread{
     
     public Double ErrorRate (int total, int errorNum){
         
-        Double errorPercentage = (double)(errorNum/total)*100;
+        Double errorPercentage = ((double)errorNum/total)*100.0;
         
         return errorPercentage;
     }

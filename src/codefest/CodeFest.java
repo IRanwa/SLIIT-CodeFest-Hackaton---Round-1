@@ -28,34 +28,63 @@ public class CodeFest {
         
         LocalDate date = java.time.LocalDate.now();
         String d = String.valueOf(date);
-        
         System.out.println(d);
         
         LocalTime startTime = java.time.LocalTime.now();
         String st = String.valueOf(startTime);
         System.out.println(st);
         
-        Timer timer= new Timer();
-        
-        timer.scheduleAtFixedRate(new TimerTask(){
+        Timer timer1hrs= new Timer();
+       
+        timer1hrs.scheduleAtFixedRate(new TimerTask(){
             @Override
             public void run() {
-                Calculations iot2 = new Calculations();
-                Calculations iot3 = new Calculations();
-                Calculations iot4 = new Calculations();
-                Calculations iot5 = new Calculations();
                 
-                int counter = 0;
-                iot2.processingRate(counter,timer);
-                iot3.processingRate(counter, timer);
-                iot4.processingRate(counter, timer);
-                iot5.processingRate(counter, timer);
+                Timer timer5min = new Timer();
                 
+                timer5min.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        
+                        Timer timer1second = new Timer();
+                        
+                        timer1second.scheduleAtFixedRate(new TimerTask() {
+                            
+                             long start = System.currentTimeMillis();
+                             
+                            @Override
+                            public void run() {
+                                
+//                                System.out.println("Time "+ (System.currentTimeMillis()-start));
+//                                int x =0;
+//                                for(;x<100000;x++){
+//                                
+//                                }
+//                                
+//                                System.out.println("intms" + x);
+//                                
+//                                start= System.currentTimeMillis();
+                                Calculations iot2 = new Calculations();
+                                Calculations iot3 = new Calculations();
+                                Calculations iot4 = new Calculations();
+                                Calculations iot5 = new Calculations();
+
+                                int counter = 0;
+                                iot2.processingRate(counter,timer1second);
+                                iot3.processingRate(counter, timer1second);
+                                iot4.processingRate(counter, timer1second);
+                                iot5.processingRate(counter, timer1second);
+                                    }
+                        }, 0, 1000);
+                        
+                
+                
+                    }
+                }, 0, 300000);
                 
             }
         
         },0,3600000);
-        
         
         
         
