@@ -1,0 +1,7 @@
+INSERT INTO `codefest`.`employee` (`EmpID`, `EmpName`, `EmpRole`) VALUES ('cb007139', 'thilina', 'm');
+
+INSERT INTO `codefest`.`shiftreference` (`Date`, `Shift`, `Step`) VALUES ('2015-12-17', 'mm', 'mm');
+
+INSERT INTO `codefest`.`reporttable` (`shiftRefId`, `StartTime`, `EndTime`, `ProcessRate`, `Error`) VALUES ('256', '2038-01-19 03:14:07', '2038-01-19 03:14:07', '5.5', '4.5');
+
+INSERT INTO `codefest`.`employeestats` ( `EmpID`) VALUES ( 'cb0012');
