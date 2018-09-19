@@ -1,10 +1,10 @@
 package Frame;
 
-
-import codefest.readFromCSV;
-import com.sun.media.sound.RealTimeSequencerProvider;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
+import codefest.loadData;
+import codefest.setupDataSet;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.jfree.chart.ChartPanel;
 
 /*
@@ -21,32 +21,47 @@ public class Main extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
+    private setupDataSet set;
+
     public Main() {
         initComponents();
-        charts();
-        errorLineChart();
-        processRateChart();
-        
+        set = new setupDataSet();
+        ArrayList<String> Steps = new ArrayList<>();
+        for (int x = 1; x <= 5; x++) {
+            Steps.add("Step " + x);
+        }
+        charts(Steps);
+        errorLineChart(Steps);
+        processRateChart(Steps);
+
     }
 
-    private void charts() {
-        readFromCSV csv = new readFromCSV();
-        ChartPanel chart = csv.setupBarChart();
+    private void charts(ArrayList<String> steps) {
+        RealTimePanel.removeAll();
+        set.setSteps(steps);
+        ChartPanel chart = set.setupBarChart();
         RealTimePanel.add(chart);
-        //setContentPane(chart);
+        RealTimePanel.revalidate();
+        RealTimePanel.repaint();
+
     }
-    
-    private void errorLineChart(){
-    
-        readFromCSV csv = new readFromCSV();
-        ChartPanel errorpanel = csv.setupErrorLineChart();
+
+    private void errorLineChart(ArrayList<String> steps) {
+        ErrrorPercentagePanel.removeAll();
+        set.setSteps(steps);
+        ChartPanel errorpanel = set.setupErrorLineChart();
         ErrrorPercentagePanel.add(errorpanel);
+        ErrrorPercentagePanel.revalidate();
+        ErrrorPercentagePanel.repaint();
     }
-    
-    private void processRateChart (){
-        readFromCSV csv = new readFromCSV();
-        ChartPanel ratepanel = csv.setupLineChart();
+
+    private void processRateChart(ArrayList<String> steps) {
+        ProcessRatePanel.removeAll();
+        set.setSteps(steps);
+        ChartPanel ratepanel = set.setupProcessLineChart();
         ProcessRatePanel.add(ratepanel);
+        ProcessRatePanel.revalidate();
+        ProcessRatePanel.repaint();
     }
 
     /**
@@ -136,7 +151,19 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadData load = new loadData();
+                ArrayList<String> steps = load.getSteps();
+                charts(steps);
+                errorLineChart(steps);
+                processRateChart(steps);
+                load.startReading();
+            }
+        }).start();
+
+
     }//GEN-LAST:event_btnStartActionPerformed
 
     /**

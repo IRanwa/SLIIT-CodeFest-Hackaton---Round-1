@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package codefest;
+package Model;
 
 /**
  *
  * @author USER
  */
-class Shiftlist {
-    String shiftId;
-    String stepId;
-    String employeeID;
-    String employeeName;
-    String employeeRole;
+public class Shiftlist {
+    private String shiftId;
+    private String stepId;
+    private String employeeID;
+    private String employeeName;
+    private String employeeRole;
 
     public Shiftlist(String shiftId,String stepId, String employeeID, String employeeName, String employeeRole) {
         this.shiftId = shiftId;

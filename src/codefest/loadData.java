@@ -5,11 +5,22 @@
  */
 package codefest;
 
+import Model.Shiftlist;
+import Model.DAO;
 import Model.DailyProcess;
 import Model.Employee;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -19,17 +30,21 @@ import javax.swing.JPanel;
  */
 public class loadData {
 
-    int noOfIOTDev;
     DAO dao;
+    ArrayList<String> steps;
+    boolean stopTask;
 
+    //Read the csv file and insert those records into the database
+    //Insert Employee Details
+    //Insert Shift Details
+    //Insert EmployeeStats Details (Which represent employee working in which shift)
     public loadData() {
-        dao = new DAO();
-        readFromCSV CSV1 = new readFromCSV();
-        ArrayList<Shiftlist> list = CSV1.readFromCSV();
-        
+        readFromCSV csv = new readFromCSV();
+        ArrayList<Shiftlist> list = csv.readFile();
+
         ArrayList<String> shifts = new ArrayList<>();
-        ArrayList<String> steps = new ArrayList<>();
-        
+        steps = new ArrayList<>();
+        dao = new DAO();
         if (list != null && list.size() > 0) {
             for (Shiftlist s : list) {
                 String shiftId = s.getShiftId();
@@ -37,48 +52,161 @@ public class loadData {
                 String empId = s.getEmployeeID();
                 String empName = s.getEmployeeName();
                 String empRole = s.getEmployeeRole();
-                
+
                 //Adding Employee Details
                 Employee emp;
                 if (empRole.equalsIgnoreCase("manager")) {
                     emp = new Employee(empId, empName, 'M');
-                }else{
+                } else {
                     emp = new Employee(empId, empName, 'E');
                 }
                 dao.addEmployee(emp);
-                
+
                 boolean flag = true;
-                for(String shift : shifts){
-                    if(shift.equals(shiftId)){
+                for (String shift : shifts) {
+                    if (shift.equals(shiftId)) {
                         flag = false;
                         break;
                     }
                 }
-                if(flag){
+                if (flag) {
                     shifts.add(shiftId);
                 }
-                
+
                 flag = true;
-                for(String step : steps){
-                    if(step.equals(stepId)){
+                for (String step : steps) {
+                    if (step.equals(stepId)) {
                         flag = false;
                         break;
                     }
                 }
-                if(flag){
+                if (flag) {
                     steps.add(stepId);
                 }
             }
-            
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
             DailyProcess dailyProcess = new DailyProcess(formatter.format(date), shifts, steps);
-            dao.addShiftDetails(dailyProcess);
-            
-            
-            //dao.addEmployeeStats(, employee)
+            List<Integer> shiftRefIdList = dao.addShiftDetails(dailyProcess);
+            dao.addEmployeeStats(shiftRefIdList, list);
         } else {
             JOptionPane.showMessageDialog(new JPanel(), "No Shift Details!", "", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public ArrayList<String> getSteps() {
+        return this.steps;
+    }
+
+    public void startReading() {
+        Timer timer6hrs = new Timer();
+
+        //Create each IOT device calculation class instance
+        ArrayList<Calculations> calList = new ArrayList<>();
+        for (int x = 0; steps.size() + 1 > x; x++) {
+            calList.add(new Calculations());
+        }
+        //Assuming 1 Shift goes upto 6 hours
+        timer6hrs.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Timer timer1hrs = new Timer();
+                timer1hrs.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (stopTask) {
+                            this.cancel();
+                        }
+                        //Reset error and total count of each IOT device every 1 Hour
+                        for (int x = 0; x < calList.size(); x++) {
+                            calList.get(x).reset1Hr();
+                        }
+                        Timer timer5min = new Timer();
+                        timer5min.scheduleAtFixedRate(new TimerTask() {
+                            @Override
+                            public void run() {
+                                if (stopTask) {
+                                    this.cancel();
+                                }
+                                //Reset error and total count of each IOT device every 5 Minutes
+                                for (int x = 0; x < calList.size(); x++) {
+                                    calList.get(x).reset5Min();
+                                }
+                                Timer timer1second = new Timer();
+                                timer1second.scheduleAtFixedRate(new TimerTask() {
+
+                                    //Get current time in milliseconds
+                                    long start = System.currentTimeMillis();
+
+                                    @Override
+                                    public void run() {
+                                        if (stopTask) {
+                                            this.cancel();
+                                        }
+                                        //Reset error and total count of each IOT device every 1 second
+                                        for (int x = 0; x < calList.size(); x++) {
+                                            calList.get(x).reset1Sec();
+                                        }
+
+                                        //Randomly generate messages
+                                        Random r = new Random();
+                                        //Get no of items go through each product line randomly (Between 800 - 1000 Items)
+                                        int noOfItem = r.nextInt(1000 - 800 + 1) + 800;
+                                        for (int x = 0; x < noOfItem; x++) {
+                                            //Get IOT Device No
+                                            int iotDevNo = r.nextInt(5 - 1 + 1) + 1;
+                                            //Get Received item error or not (error when value = 1)
+                                            int num = r.nextInt(2 - 1 + 1) + 1;
+                                            if (num == 1) {
+                                                //Increment each IOT Device error count
+                                                calList.get(iotDevNo - 1).incrementError();
+                                            }
+                                            //Increment each IOT Device total count
+                                            calList.get(iotDevNo - 1).incrementTotal();
+                                        }
+
+                                        //Display each IOT device error rate and processing rate per second
+                                        for (int x = 0; x < calList.size(); x++) {
+                                            Double errorRate = calList.get(x).ErrorRate();
+                                            Double processRate = calList.get(x).processingRate(System.currentTimeMillis() - start);
+                                        }
+                                        //Get current time in milliseconds
+                                        start = System.currentTimeMillis();
+                                    }
+                                }, 0, 1000);
+                                //Display each IOT device error rate and processing rate every 5 Minutes
+                                for (int x = 0; x < calList.size(); x++) {
+                                    calList.get(x).error5MinRate();
+                                    calList.get(x).process5MinRate();
+                                }
+                            }
+                        }, 0, (1000 * 60 * 5));
+
+                    }
+                }, 0, (1000 * 60 * 60));
+                stopTask = true;
+            }
+        }, 0, (1000 * 60 * 60 * 6));
+
+    }
+
+    private void load() {
+        File file = new File("2016-09-19.csv");
+
+        if (file.exists()) {
+            Scanner scanner;
+            try {
+                scanner = new Scanner(file);
+                scanner.useDelimiter(",");
+                int count = 0;
+                while (scanner.hasNextLine()) {
+                    System.out.println(scanner.nextLine());
+                }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(readFromCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
 }

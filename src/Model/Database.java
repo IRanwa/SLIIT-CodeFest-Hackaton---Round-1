@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package codefest;
+package Model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
  *
  * @author USER
  */
-class Database {
+public class Database {
     
     public static Connection getConnection(){
         String URL = "jdbc:mysql://localhost:3306/codefest";

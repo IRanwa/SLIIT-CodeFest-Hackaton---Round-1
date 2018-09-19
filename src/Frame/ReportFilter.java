@@ -1,6 +1,6 @@
 package Frame;
 
-import codefest.DAO;
+import Model.DAO;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +26,10 @@ public class ReportFilter extends javax.swing.JFrame {
         initComponents();
         setDatePicker();
         setSteps();
+        
+        
     }
-
+    
     private void setDatePicker() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -2);
@@ -47,8 +49,10 @@ public class ReportFilter extends javax.swing.JFrame {
     }
 
     private void setSteps() {
+        txtStepId.removeAllItems();
         DAO dao = new DAO();
         List<String> steps = dao.getStepID();
+        txtStepId.addItem("All");
         for (String step : steps ) {
             txtStepId.addItem(step);
         }
@@ -89,9 +93,23 @@ public class ReportFilter extends javax.swing.JFrame {
         jLabel1.setText("Date Range");
         jPanel1.add(jLabel1);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         txtStartDate.setDateFormatString("yyyy-MM-dd");
+        txtStartDate.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                txtStartDateAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        txtStartDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtStartDatePropertyChange(evt);
+            }
+        });
         jPanel3.add(txtStartDate);
 
         jPanel1.add(jPanel3);
@@ -100,7 +118,7 @@ public class ReportFilter extends javax.swing.JFrame {
         jLabel3.setText("To:");
         jPanel1.add(jLabel3);
 
-        jPanel4.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         txtEndDate.setDateFormatString("yyyy-MM-dd");
         jPanel4.add(txtEndDate);
@@ -199,6 +217,14 @@ public class ReportFilter extends javax.swing.JFrame {
     private void txtTimePeriodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimePeriodActionPerformed
         System.out.println("hi");
     }//GEN-LAST:event_txtTimePeriodActionPerformed
+
+    private void txtStartDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtStartDatePropertyChange
+        System.out.println("step");
+    }//GEN-LAST:event_txtStartDatePropertyChange
+
+    private void txtStartDateAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_txtStartDateAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStartDateAncestorAdded
 
     /**
      * @param args the command line arguments

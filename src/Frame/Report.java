@@ -1,6 +1,8 @@
 package Frame;
 
+import codefest.loadData;
 import codefest.readFromCSV;
+import codefest.setupDataSet;
 import org.jfree.chart.ChartPanel;
 
 /*
@@ -20,23 +22,23 @@ public class Report extends javax.swing.JFrame {
      */
     public Report() {
         initComponents();
-        ProcessReport();
-        ErrorReport();
+        //ProcessReport(null);
+        //ErrorReport(null);
     }
     
     private void ProcessReport() {
-        readFromCSV csv = new readFromCSV();
-        ChartPanel chart = csv.reportProcessRate();
-        ProcessReport.add(chart);
+        //setupDataSet set = new setupDataSet();
+        //ChartPanel chart = set.reportProcessRate();
+        //ProcessReport.add(chart);
         
        
     }
     
     private void ErrorReport(){
         
-        readFromCSV csv = new readFromCSV();
-        ChartPanel chart = csv.reportErrorPercentage();
-        ErrorReport.add(chart);
+        //readFromCSV csv = new readFromCSV();
+        //ChartPanel chart = csv.reportErrorPercentage();
+       // ErrorReport.add(chart);
     }
     
    
