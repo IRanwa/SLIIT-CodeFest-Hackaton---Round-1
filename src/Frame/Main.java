@@ -1,11 +1,17 @@
 package Frame;
 
+
+import codefest.readFromCSV;
+import com.sun.media.sound.RealTimeSequencerProvider;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import org.jfree.chart.ChartPanel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Frank
@@ -17,6 +23,30 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        charts();
+        errorLineChart();
+        processRateChart();
+        
+    }
+
+    private void charts() {
+        readFromCSV csv = new readFromCSV();
+        ChartPanel chart = csv.setupBarChart();
+        RealTimePanel.add(chart);
+        //setContentPane(chart);
+    }
+    
+    private void errorLineChart(){
+    
+        readFromCSV csv = new readFromCSV();
+        ChartPanel errorpanel = csv.setupErrorLineChart();
+        ErrrorPercentagePanel.add(errorpanel);
+    }
+    
+    private void processRateChart (){
+        readFromCSV csv = new readFromCSV();
+        ChartPanel ratepanel = csv.setupLineChart();
+        ProcessRatePanel.add(ratepanel);
     }
 
     /**
@@ -31,10 +61,10 @@ public class Main extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        RealTimePanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        ProcessRatePanel = new javax.swing.JPanel();
+        ErrrorPercentagePanel = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -51,50 +81,18 @@ public class Main extends javax.swing.JFrame {
         jButton2.setText("Stop");
         jPanel1.add(jButton2);
 
-        jPanel2.setBackground(new java.awt.Color(204, 0, 0));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 257, Short.MAX_VALUE)
-        );
+        RealTimePanel.setBackground(new java.awt.Color(255, 0, 51));
+        RealTimePanel.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
-        jPanel5.setBackground(new java.awt.Color(0, 204, 0));
+        ProcessRatePanel.setBackground(new java.awt.Color(0, 204, 0));
+        ProcessRatePanel.setLayout(new java.awt.BorderLayout());
+        jPanel3.add(ProcessRatePanel);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
-        );
-
-        jPanel3.add(jPanel5);
-
-        jPanel4.setBackground(new java.awt.Color(0, 153, 102));
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
-        );
-
-        jPanel3.add(jPanel4);
+        ErrrorPercentagePanel.setBackground(new java.awt.Color(0, 153, 102));
+        ErrrorPercentagePanel.setLayout(new java.awt.BorderLayout());
+        jPanel3.add(ErrrorPercentagePanel);
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -111,7 +109,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RealTimePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 801, Short.MAX_VALUE))
                 .addContainerGap())
@@ -122,7 +120,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(RealTimePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -165,18 +163,24 @@ public class Main extends javax.swing.JFrame {
                 new Main().setVisible(true);
             }
         });
+
+//        JPanel RealTimePanel = new JPanel();
+//        RealTimePanel.setLayout(new java.awt.BorderLayout());
+//        barChart bc = new barChart("Test");
+//        RealTimePanel.add(bc);
+//        bc.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel ErrrorPercentagePanel;
+    private javax.swing.JPanel ProcessRatePanel;
+    private javax.swing.JPanel RealTimePanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
 }

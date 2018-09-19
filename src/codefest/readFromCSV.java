@@ -11,42 +11,138 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
  * @author USER
  */
 public class readFromCSV {
-    
+
     ArrayList<Shiftlist> shiftdata = new ArrayList<>();
-    
+
     File file = new File("Shift.csv");
-    
+
     Scanner sc;
 
-    public  ArrayList<Shiftlist> readFromCSV() {
+    public ArrayList<Shiftlist> readFromCSV() {
         try {
             this.sc = new Scanner(file);
             sc.useDelimiter(",");
-            
-            while (sc.hasNext()) {                
+
+            while (sc.hasNext()) {
                 String stepId = sc.next();
-                String employeeID=sc.next();
-                String employeeRole=sc.next();
-                
+                String employeeID = sc.next();
+                String employeeRole = sc.next();
+
                 Shiftlist sl = new Shiftlist(stepId, employeeID, employeeRole);
-                
+
                 shiftdata.add(sl);
-                
+
             }
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(readFromCSV.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return shiftdata;
     }
+
+    public ChartPanel setupBarChart() {
+        CategoryDataset dataset = createDataset();
+
+        JFreeChart barchart = ChartFactory.createBarChart("LIVE VIEW", "STEP", "Processign Rate",
+                dataset, PlotOrientation.VERTICAL, true, true, false);
+        ChartPanel barpanel = new ChartPanel(barchart);
+        return barpanel;
+    }
     
+    public ChartPanel setupLineChart(){
+        CategoryDataset dataset = linedata();
+        
+        JFreeChart linechart = ChartFactory.createLineChart("Process Rate", "Step", "Rate", dataset, 
+                PlotOrientation.VERTICAL, true, true, false);
+        
+        ChartPanel linepanel = new ChartPanel(linechart);
+        
+        return linepanel;
+    }
     
-  
+     public ChartPanel setupErrorLineChart(){
+        CategoryDataset dataset = linedata();
+        
+        JFreeChart linechart = ChartFactory.createLineChart("Error Percentage", "Step", "Percentage", dataset, 
+                PlotOrientation.VERTICAL, true, true, false);
+        
+        ChartPanel linepanel = new ChartPanel(linechart);
+        
+        return linepanel;
+    }
+     
+     public ChartPanel reportProcessRate(){
+         CategoryDataset reportData = linedata();
+         JFreeChart reportlinechart = ChartFactory.createLineChart("Process Rate Report", "Step","ProcessRate", reportData,
+                 PlotOrientation.VERTICAL, true, true, false);
+         
+         ChartPanel reportProcess = new ChartPanel(reportlinechart);
+         
+         return reportProcess;
+     }
+     
+     public ChartPanel reportErrorPercentage(){
+         CategoryDataset reportData = linedata();
+         JFreeChart reportlinechart = ChartFactory.createLineChart("Error Percentage Report", "Step","Percenatge", reportData,
+                 PlotOrientation.VERTICAL, true, true, false);
+         
+         ChartPanel reportError = new ChartPanel(reportlinechart);
+         
+         return reportError;
+     }
+
+    private CategoryDataset createDataset() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        // Population in 2005
+        dataset.addValue(10, "USA", "2005");
+        dataset.addValue(15, "India", "2005");
+        dataset.addValue(20, "China", "2005");
+
+        // Population in 2010
+        dataset.addValue(15, "USA", "2010");
+        dataset.addValue(20, "India", "2010");
+        dataset.addValue(25, "China", "2010");
+
+        // Population in 2015
+        dataset.addValue(20, "USA", "2015");
+        dataset.addValue(25, "India", "2015");
+        dataset.addValue(30, "China", "2015");
+
+        return dataset;
+    }
+    private CategoryDataset linedata(){
+        
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    
+        dataset.addValue(10, "USA", "2005");
+        dataset.addValue(15, "India", "2005");
+        dataset.addValue(20, "China", "2005");
+
+        // Population in 2010
+        dataset.addValue(15, "USA", "2010");
+        dataset.addValue(20, "India", "2010");
+        dataset.addValue(25, "China", "2010");
+
+        // Population in 2015
+        dataset.addValue(20, "USA", "2015");
+        dataset.addValue(25, "India", "2015");
+        dataset.addValue(30, "China", "2015");
+        
+        return dataset;
+    }
+
 }
