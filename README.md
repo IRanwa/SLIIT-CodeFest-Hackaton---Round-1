@@ -24,7 +24,7 @@ Pamuditha Navaratna
 
 Frameworks: Net Beans, MySQL
 
-Libraries: JFreeChart 1.0.19, MySQL JDBC
+Libraries: JFreeChart 1.0.19, MySQL JDBC,jcommon-1.0.23,jcalendar-1.4
 
 Application Servers:
 
