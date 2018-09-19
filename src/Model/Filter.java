@@ -25,6 +25,15 @@ public class Filter {
         this.empName = empName;
     }
 
+    public Filter(String startDate, String endDate, String stepId, String aggTime) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.stepId = stepId;
+        this.aggTime = aggTime;
+        this.empName="";
+    }
+    
+
     public String getStartDate() {
         return startDate;
     }

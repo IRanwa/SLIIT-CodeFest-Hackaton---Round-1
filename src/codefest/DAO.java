@@ -113,7 +113,7 @@ public class DAO {
         return StepID;
     }
     
-    public List<String> getEmpName(Filter filter, String shift){
+    public List<String> getEmpName(Filter filter){
     
         List<String> EmpName = new ArrayList<>();
         try {
@@ -135,7 +135,7 @@ public class DAO {
                 "where EmpID IN (select EmpID from employeestats \n" +
                 "where id IN (select shiftRefId from reporttable \n" +
                 "where shiftRefId IN (select id from shiftreference \n" +
-                "where Shift= " + shift + ") and EndTime between"+ filter.getStartDate()+ " and " + filter.getEndDate() + "));";
+                "where Step= " + filter.getStepId() + ") and EndTime between "+ filter.getStartDate()+ " and " + filter.getEndDate() + "))";
                    
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();

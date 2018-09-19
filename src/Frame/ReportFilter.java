@@ -1,8 +1,10 @@
 package Frame;
 
+import Model.Filter;
 import codefest.DAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,29 +28,29 @@ public class ReportFilter extends javax.swing.JFrame {
      */
     public ReportFilter() {
         initComponents();
-        setDatePicker();
+        //setDatePicker();
         setSteps();
     }
     
     
 
-    private void setDatePicker() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -2);
-        txtStartDate.setMinSelectableDate(calendar.getTime());
-
-        calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        txtStartDate.setMaxSelectableDate(calendar.getTime());
-
-        calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -2);
-        txtEndDate.setMinSelectableDate(calendar.getTime());
-
-        calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        txtEndDate.setMaxSelectableDate(calendar.getTime());
-    }
+//    private void setDatePicker() {
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.YEAR, -2);
+//        txtStartDate.setMinSelectableDate(calendar.getTime());
+//
+//        calendar = Calendar.getInstance();
+//        calendar.add(Calendar.DATE, -1);
+//        txtStartDate.setMaxSelectableDate(calendar.getTime());
+//
+//        calendar = Calendar.getInstance();
+//        calendar.add(Calendar.YEAR, -2);
+//        txtEndDate.setMinSelectableDate(calendar.getTime());
+//
+//        calendar = Calendar.getInstance();
+//        calendar.add(Calendar.DATE, -1);
+//        txtEndDate.setMaxSelectableDate(calendar.getTime());
+//    }
 
     private void setSteps() {
         DAO dao = new DAO();
@@ -95,7 +97,7 @@ public class ReportFilter extends javax.swing.JFrame {
         jLabel1.setText("Date Range");
         jPanel1.add(jLabel1);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         txtStartDate.setDateFormatString("yyyy-MM-dd");
         jPanel3.add(txtStartDate);
@@ -106,7 +108,7 @@ public class ReportFilter extends javax.swing.JFrame {
         jLabel3.setText("To:");
         jPanel1.add(jLabel3);
 
-        jPanel4.setLayout(new java.awt.GridLayout());
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
         txtEndDate.setDateFormatString("yyyy-MM-dd");
         jPanel4.add(txtEndDate);
@@ -119,6 +121,11 @@ public class ReportFilter extends javax.swing.JFrame {
         jPanel2.add(jLabel5);
 
         txtStepId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
+        txtStepId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStepIdActionPerformed(evt);
+            }
+        });
         jPanel2.add(txtStepId);
 
         jLabel6.setText("Time Period");
@@ -186,31 +193,10 @@ public class ReportFilter extends javax.swing.JFrame {
         String sDate = ((JTextField) txtStartDate.getDateEditor().getUiComponent()).getText();
         String eDate = ((JTextField) txtEndDate.getDateEditor().getUiComponent()).getText();
         //String stepId = txtStepId.getSelectedItem().toString();
-        //String aggTime = txtTimePeriod.getSelectedItem().toString();
+//        String aggTime = txtTimePeriod.getSelectedItem().toString();
         String empName = txtEmpName.getSelectedItem().toString();
         
-        txtStepId.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                    String stepId = txtStepId.getSelectedItem().toString();
-                    
-                    if(stepId == null && stepId.equals("")){
-                        JOptionPane.showMessageDialog(new JPanel(), "Select Step ID", "", JOptionPane.ERROR_MESSAGE);
-                    }
-            }
-        });
-        
-        txtTimePeriod.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                String aggTime = txtTimePeriod.getSelectedItem().toString();
-                
-                if(aggTime == null && aggTime.equals("")){
-                    JOptionPane.showMessageDialog(new JPanel(), "Select Aggregated Time", "", JOptionPane.ERROR_MESSAGE);
-                }
-                
-            }
-        });
+//        
         
         if ((sDate != null && !sDate.equals("")) && (eDate != null && !eDate.equals(""))
                 && !empName.equals("")) {
@@ -229,6 +215,27 @@ public class ReportFilter extends javax.swing.JFrame {
     private void txtTimePeriodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimePeriodActionPerformed
         System.out.println("hi");
     }//GEN-LAST:event_txtTimePeriodActionPerformed
+
+    private void txtStepIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStepIdActionPerformed
+       String stepId = txtStepId.getSelectedItem().toString();
+       String sDate = ((JTextField) txtStartDate.getDateEditor().getUiComponent()).getText();
+        String eDate = ((JTextField) txtEndDate.getDateEditor().getUiComponent()).getText();
+         String aggTime = txtTimePeriod.getSelectedItem().toString();           
+                    if(stepId != null && !stepId.equals("")){
+                        txtEmpName.removeAllItems();
+                        List<String> names = new ArrayList<>();
+                        DAO dao = new DAO();
+                        Filter filter = new Filter(sDate, eDate,stepId, aggTime);
+                        names=dao.getEmpName(filter);
+                        for(String a : names){
+                            txtEmpName.addItem(a);
+                        }
+                        
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(new JPanel(), "Select Step ID", "", JOptionPane.ERROR_MESSAGE);
+                    }
+    }//GEN-LAST:event_txtStepIdActionPerformed
 
     /**
      * @param args the command line arguments
