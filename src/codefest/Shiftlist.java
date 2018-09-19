@@ -10,44 +10,57 @@ package codefest;
  * @author USER
  */
 class Shiftlist {
+    String shiftId;
     String stepId;
     String employeeID;
+    String employeeName;
     String employeeRole;
 
-    public Shiftlist(String stepId, String employeeID, String employeeRole) {
+    public Shiftlist(String shiftId,String stepId, String employeeID, String employeeName, String employeeRole) {
+        this.shiftId = shiftId;
         this.stepId = stepId;
         this.employeeID = employeeID;
+        this.employeeName = employeeName;
         this.employeeRole = employeeRole;
     }
-
-    Shiftlist() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public String getShiftId() {
+        return shiftId;
     }
 
     public String getStepId() {
         return stepId;
     }
 
-    public void setStepId(String stepId) {
-        this.stepId = stepId;
-    }
-
     public String getEmployeeID() {
         return employeeID;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+    
+    public String getEmployeeRole() {
+        return employeeRole;
+    }
+    
+    public void setShiftId(String shiftId) {
+        this.shiftId = shiftId;
+    }
+    
+    public void setStepId(String stepId) {
+        this.stepId = stepId;
     }
 
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
 
-    public String getEmployeeRole() {
-        return employeeRole;
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
-
+    
     public void setEmployeeRole(String employeeRole) {
         this.employeeRole = employeeRole;
     }
-    
-    
-    
 }

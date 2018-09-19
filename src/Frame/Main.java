@@ -59,8 +59,8 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnStart = new javax.swing.JButton();
+        btnStop = new javax.swing.JButton();
         RealTimePanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         ProcessRatePanel = new javax.swing.JPanel();
@@ -73,13 +73,19 @@ public class Main extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 50, 5));
 
-        jButton1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jButton1.setText("Start");
-        jPanel1.add(jButton1);
+        btnStart.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        btnStart.setText("Start");
+        btnStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnStart);
 
-        jButton2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jButton2.setText("Stop");
-        jPanel1.add(jButton2);
+        btnStop.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        btnStop.setText("Stop");
+        btnStop.setEnabled(false);
+        jPanel1.add(btnStop);
 
         RealTimePanel.setBackground(new java.awt.Color(255, 0, 51));
         RealTimePanel.setLayout(new java.awt.BorderLayout());
@@ -129,6 +135,10 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
+        
+    }//GEN-LAST:event_btnStartActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -175,8 +185,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel ErrrorPercentagePanel;
     private javax.swing.JPanel ProcessRatePanel;
     private javax.swing.JPanel RealTimePanel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnStart;
+    private javax.swing.JButton btnStop;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
