@@ -1,5 +1,7 @@
 package Frame;
 
+import java.util.Calendar;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -17,8 +19,26 @@ public class ReportFilter extends javax.swing.JFrame {
      */
     public ReportFilter() {
         initComponents();
+        setDatePicker();
     }
 
+    private void setDatePicker(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -2);
+        startDate.setMinSelectableDate(calendar.getTime());
+        
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        startDate.setMaxSelectableDate(calendar.getTime());
+        
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -2);
+        endDate.setMinSelectableDate(calendar.getTime());
+        
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        endDate.setMaxSelectableDate(calendar.getTime());
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,9 +50,11 @@ public class ReportFilter extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        startDate = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        endDate = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -52,14 +74,23 @@ public class ReportFilter extends javax.swing.JFrame {
         jLabel1.setText("Date Range");
         jPanel1.add(jLabel1);
 
-        jLabel2.setText("jLabel2");
-        jPanel1.add(jLabel2);
+        jPanel3.setLayout(new java.awt.GridLayout());
 
+        startDate.setDateFormatString("yyyy-MM-dd");
+        jPanel3.add(startDate);
+
+        jPanel1.add(jPanel3);
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("To:");
         jPanel1.add(jLabel3);
 
-        jLabel4.setText("jLabel4");
-        jPanel1.add(jLabel4);
+        jPanel4.setLayout(new java.awt.GridLayout());
+
+        endDate.setDateFormatString("yyyy-MM-dd");
+        jPanel4.add(endDate);
+
+        jPanel1.add(jPanel4);
 
         jPanel2.setLayout(new java.awt.GridLayout(3, 2, 0, 20));
 
@@ -100,7 +131,7 @@ public class ReportFilter extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 832, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -163,20 +194,22 @@ public class ReportFilter extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser endDate;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
+    private com.toedter.calendar.JDateChooser startDate;
     // End of variables declaration//GEN-END:variables
 }
