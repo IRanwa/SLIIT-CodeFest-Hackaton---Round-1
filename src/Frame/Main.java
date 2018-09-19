@@ -3,8 +3,6 @@ package Frame;
 import codefest.loadData;
 import codefest.setupDataSet;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.jfree.chart.ChartPanel;
 
 /*
@@ -22,7 +20,7 @@ public class Main extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     private setupDataSet set;
-
+    private loadData load;
     public Main() {
         initComponents();
         set = new setupDataSet();
@@ -100,6 +98,11 @@ public class Main extends javax.swing.JFrame {
         btnStop.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         btnStop.setText("Stop");
         btnStop.setEnabled(false);
+        btnStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnStop);
 
         RealTimePanel.setBackground(new java.awt.Color(255, 0, 51));
@@ -119,6 +122,25 @@ public class Main extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Report");
+        jMenu2.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
+            public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
+                jMenu2MenuKeyPressed(evt);
+            }
+            public void menuKeyReleased(javax.swing.event.MenuKeyEvent evt) {
+            }
+            public void menuKeyTyped(javax.swing.event.MenuKeyEvent evt) {
+            }
+        });
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -154,17 +176,36 @@ public class Main extends javax.swing.JFrame {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                loadData load = new loadData();
+                load = new loadData(set);
                 ArrayList<String> steps = load.getSteps();
                 charts(steps);
                 errorLineChart(steps);
                 processRateChart(steps);
                 load.startReading();
+                btnStop.setEnabled(true);
+                btnStart.setEnabled(false);
             }
         }).start();
 
 
     }//GEN-LAST:event_btnStartActionPerformed
+
+    private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopActionPerformed
+        load.stopReading();
+    }//GEN-LAST:event_btnStopActionPerformed
+
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+        
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
+    private void jMenu2MenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_jMenu2MenuKeyPressed
+        
+    }//GEN-LAST:event_jMenu2MenuKeyPressed
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        ReportFilter rf = new ReportFilter();
+        rf.setVisible(true);
+    }//GEN-LAST:event_jMenu2MouseClicked
 
     /**
      * @param args the command line arguments

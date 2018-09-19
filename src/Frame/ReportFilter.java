@@ -1,8 +1,8 @@
 package Frame;
 
 import Model.DAO;
+import Model.Filter;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,10 +26,9 @@ public class ReportFilter extends javax.swing.JFrame {
         initComponents();
         setDatePicker();
         setSteps();
-        
-        
+        setEmployee(null);
     }
-    
+
     private void setDatePicker() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -2);
@@ -53,8 +52,17 @@ public class ReportFilter extends javax.swing.JFrame {
         DAO dao = new DAO();
         List<String> steps = dao.getStepID();
         txtStepId.addItem("All");
-        for (String step : steps ) {
+        for (String step : steps) {
             txtStepId.addItem(step);
+        }
+    }
+
+    private void setEmployee(Filter filter) {
+        DAO dao = new DAO();
+        List<String> empList = dao.getEmpName(filter);
+        txtEmpName.removeAllItems();
+        for (String emp : empList) {
+            txtEmpName.addItem(emp);
         }
     }
 
@@ -131,6 +139,11 @@ public class ReportFilter extends javax.swing.JFrame {
         jPanel2.add(jLabel5);
 
         txtStepId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
+        txtStepId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStepIdActionPerformed(evt);
+            }
+        });
         jPanel2.add(txtStepId);
 
         jLabel6.setText("Time Period");
@@ -215,16 +228,31 @@ public class ReportFilter extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txtTimePeriodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimePeriodActionPerformed
-        System.out.println("hi");
+
     }//GEN-LAST:event_txtTimePeriodActionPerformed
 
     private void txtStartDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtStartDatePropertyChange
-        System.out.println("step");
+
     }//GEN-LAST:event_txtStartDatePropertyChange
 
     private void txtStartDateAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_txtStartDateAncestorAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStartDateAncestorAdded
+
+    private void txtStepIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStepIdActionPerformed
+        if (txtStepId.getSelectedItem()!=null) {
+            String sDate = ((JTextField) txtStartDate.getDateEditor().getUiComponent()).getText();
+            String eDate = ((JTextField) txtEndDate.getDateEditor().getUiComponent()).getText();
+            String stepId = txtStepId.getSelectedItem().toString();
+            String aggTime = txtTimePeriod.getSelectedItem().toString();
+            if ((sDate != null && !sDate.equals("")) && (eDate != null && !eDate.equals(""))) {
+                Filter filter = new Filter(sDate, eDate, stepId, aggTime, null);
+                setEmployee(filter);
+            } else {
+                JOptionPane.showMessageDialog(new JPanel(), "Select all fields!", "", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_txtStepIdActionPerformed
 
     /**
      * @param args the command line arguments

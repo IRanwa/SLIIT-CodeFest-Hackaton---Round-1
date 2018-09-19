@@ -130,69 +130,38 @@ public class DAO {
         return StepID;
     }
 
-    public List<String> getEmpName(Filter filter){
-    
+    public List<String> getEmpName(Filter filter) {
+
         List<String> EmpName = new ArrayList<>();
         try {
-            
-           // List<Integer> tempShiftId = new ArrayList<>();
-           // List<String> tempEmpID = new ArrayList<>();
-//        String sql= "Select reporttable.shiftRefId from ((reportable inner join shiftreference on reporttable.shiftRefId )"
-//                + "inner join )"
-
-           // String sql ="Select employee.EmpName from ((employee inner join shiftreference on reporttable.shiftRefId =shiftreference.id))"
-
-            //String sql ="Select reporttable.shiftRefId from reporttable inner join shiftreference on reporttable.shiftRefId "
-                   // + "= shiftreference.Shift where EndTime between " + filter.getStartDate() + "and" + filter.getEndDate();
-            
-                   
-            
-            
-            String sql = "select * from employee \n" +
-                "where EmpID IN (select EmpID from employeestats \n" +
-                "where id IN (select shiftRefId from reporttable \n" +
-                "where shiftRefId IN (select id from shiftreference \n" +
-                "where Step= " + filter.getStepId() + ") and EndTime between "+ filter.getStartDate()+ " and " + filter.getEndDate() + "))";
-                   
+            String sql;
+            if (filter!=null) {
+                sql = "select * from employee "
+                        + "where EmpID IN (select EmpID from employeestats "
+                        + "where id IN (select shiftRefId from reporttable ";
+                if (!filter.getStepId().equals("All")) {
+                    sql = sql + "where shiftRefId IN (select id from shiftreference "
+                            + "where Step= " + filter.getStepId() + ") and EndTime between " + filter.getStartDate() + " and " + filter.getEndDate() + "))";
+                } else {
+                    sql = sql + ") and EndTime between " + filter.getStartDate() + " and " + filter.getEndDate() + "))";
+                }
+            }else{
+                sql = "select * from employee";
+            }
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
-                
+
+            while (rs.next()) {
                 String name = rs.getString("EmpName");
                 EmpName.add(name);
             }
-            
-//            for(int i :tempShiftId){
-//                String s = "Select EmpID from employeestats where id = " +i;
-//                PreparedStatement pa = connection.prepareStatement(s);
-//                ResultSet ra = pa.executeQuery();
-//                
-//                String Empid = ra.getString("EmpID");
-//                
-//                tempEmpID.add(Empid);
-//            }
-//            
-//            for(String d :EmpName){
-//                
-//                String w = "Select EmpName from employee where EmpId = " +d;
-//                
-//                PreparedStatement pb = connection.prepareStatement(w);
-//                ResultSet rb = pb.executeQuery();
-//                
-//                String getEmpName = rb.getString("EmpName");
-//                
-//                EmpName.add(getEmpName);
-//                
-//            }
-            
         } catch (SQLException ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return EmpName;
     }
-    
+
     public List<Stats> getReportDetails(Filter filter) {
         List<Stats> statsList = new ArrayList<>();
         try {

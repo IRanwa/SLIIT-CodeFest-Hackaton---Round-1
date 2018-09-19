@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.jfree.chart.ChartPanel;
 
 /**
  *
@@ -33,12 +34,13 @@ public class loadData {
     DAO dao;
     ArrayList<String> steps;
     boolean stopTask;
-
+    setupDataSet dataSet;
     //Read the csv file and insert those records into the database
     //Insert Employee Details
     //Insert Shift Details
     //Insert EmployeeStats Details (Which represent employee working in which shift)
-    public loadData() {
+    public loadData(setupDataSet dataSet) {
+        this.dataSet = dataSet;
         readFromCSV csv = new readFromCSV();
         ArrayList<Shiftlist> list = csv.readFile();
 
@@ -111,6 +113,7 @@ public class loadData {
         timer6hrs.schedule(new TimerTask() {
             @Override
             public void run() {
+                stopTask = false;
                 Timer timer1hrs = new Timer();
                 timer1hrs.scheduleAtFixedRate(new TimerTask() {
                     @Override
@@ -167,9 +170,11 @@ public class loadData {
                                         }
 
                                         //Display each IOT device error rate and processing rate per second
-                                        for (int x = 0; x < calList.size(); x++) {
-                                            Double errorRate = calList.get(x).ErrorRate();
-                                            Double processRate = calList.get(x).processingRate(System.currentTimeMillis() - start);
+                                        dataSet.setupErrorLineChart();
+                                        for (int x = calList.size()-1; x > 0; x++) {
+                                            Double errorRate = calList.get(x).ErrorRate() - calList.get(x-1).ErrorRate();
+                                            Double processRate = calList.get(x).processingRate(System.currentTimeMillis() - start)
+                                                    - calList.get(x-1).processingRate(System.currentTimeMillis() - start);
                                         }
                                         //Get current time in milliseconds
                                         start = System.currentTimeMillis();
@@ -177,12 +182,12 @@ public class loadData {
                                 }, 0, 1000);
                                 //Display each IOT device error rate and processing rate every 5 Minutes
                                 for (int x = 0; x < calList.size(); x++) {
-                                    calList.get(x).error5MinRate();
-                                    calList.get(x).process5MinRate();
+                                    double errorRate = calList.get(x).error5MinRate()-calList.get(x-1).error5MinRate();
+                                    double processRate = calList.get(x).process5MinRate()-calList.get(x-1).process5MinRate();
                                 }
                             }
                         }, 0, (1000 * 60 * 5));
-
+                       
                     }
                 }, 0, (1000 * 60 * 60));
                 stopTask = true;
@@ -207,6 +212,10 @@ public class loadData {
                 Logger.getLogger(readFromCSV.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public void stopReading() {
+        stopTask = true;
     }
 
 }
