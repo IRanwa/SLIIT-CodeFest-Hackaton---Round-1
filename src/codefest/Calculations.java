@@ -6,29 +6,59 @@
 package codefest;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Timer;
 
 /**
  *
  * @author USER
  */
-public class Calculations extends Thread{
-    
-    
+public class Calculations {
 
-    public Double processingRate(int Counter,Timer timer) {
-       
-        String tString = timer.toString();
-        Double t = Double.parseDouble(tString);
-        Double processingrate = (Counter/t);
-        
-        return processingrate;
+    Double processingrate = 0.0;
+    Double errorPercentage = 0.0;
+    int errorCount;
+    int totalCount;
+
+    public void incrementError(){
+        errorCount++;
     }
     
-    public Double ErrorRate (int total, int errorNum){
-        
-        Double errorPercentage = ((double)errorNum/total)*100.0;
-        
-        return errorPercentage;
+    public void incrementTotal(){
+        totalCount++;
     }
+    
+    public Double processingRate( long longNum) {
+        //System.out.println(Counter + " " + longNum);
+        if (longNum != 0) {
+            double tempPRate = ((double) totalCount / longNum) * 1000;
+            //System.out.println("prrate" + processingrate);
+            processingrate = (processingrate+tempPRate)/2;
+            //System.out.println("processing "+processingrate);
+            return tempPRate;
+        }
+        return 0.0;
+    }
+
+    public Double ErrorRate() {
+        double tempERate = ((double) errorCount / totalCount) * 100.0;
+        //System.out.println(errorPercentage);
+        errorPercentage = (errorPercentage+tempERate)/2;
+        return tempERate;
+    }
+
+    void reset() {
+        errorCount=0;
+        totalCount=0;
+    }
+
+    Double error5MinRate() {
+        return this.errorPercentage;
+    }
+    
+    Double process5MinRate() {
+        return this.processingrate;
+    }
+    
+    
 }
