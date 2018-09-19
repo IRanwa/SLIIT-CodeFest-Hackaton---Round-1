@@ -106,6 +106,8 @@ public class readFromCSV {
 
     private CategoryDataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        
+        
 
         // Population in 2005
         dataset.addValue(10, "USA", "2005");

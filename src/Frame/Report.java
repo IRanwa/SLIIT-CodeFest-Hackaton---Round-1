@@ -38,6 +38,8 @@ public class Report extends javax.swing.JFrame {
         ChartPanel chart = csv.reportErrorPercentage();
         ErrorReport.add(chart);
     }
+    
+   
 
     /**
      * This method is called from within the constructor to initialize the form.

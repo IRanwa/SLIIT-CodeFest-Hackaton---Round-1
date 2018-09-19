@@ -94,6 +94,25 @@ public class DAO {
         return false;
     }
     
+    public List<String> getStepID(){
+    
+         List<String> StepID = new ArrayList<>();
+        try {
+           
+            PreparedStatement ps = connection.prepareStatement("select Step from shiftreference group by Step");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {                
+                String id = rs.getString("Step");
+                StepID.add(id);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return StepID;
+    }
+    
     public List<Stats> getReportDetails(Filter filter) {
         List<Stats> statsList = new ArrayList<>();
         try {
