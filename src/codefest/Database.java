@@ -16,7 +16,7 @@ import java.sql.SQLException;
 class Database {
     
     public static Connection getConnection(){
-        String URL = "jdbc:mysql://localhost:3306/Codefest";
+        String URL = "jdbc:mysql://localhost:3306/codefest";
         String username = "root";
         String password = "Imesh@77";
         try{

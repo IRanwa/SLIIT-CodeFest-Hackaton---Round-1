@@ -1,13 +1,18 @@
 package Frame;
 
+import codefest.DAO;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Frank
@@ -20,25 +25,35 @@ public class ReportFilter extends javax.swing.JFrame {
     public ReportFilter() {
         initComponents();
         setDatePicker();
+        setSteps();
     }
 
-    private void setDatePicker(){
+    private void setDatePicker() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -2);
-        startDate.setMinSelectableDate(calendar.getTime());
-        
+        txtStartDate.setMinSelectableDate(calendar.getTime());
+
         calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
-        startDate.setMaxSelectableDate(calendar.getTime());
-        
+        txtStartDate.setMaxSelectableDate(calendar.getTime());
+
         calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -2);
-        endDate.setMinSelectableDate(calendar.getTime());
-        
+        txtEndDate.setMinSelectableDate(calendar.getTime());
+
         calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
-        endDate.setMaxSelectableDate(calendar.getTime());
+        txtEndDate.setMaxSelectableDate(calendar.getTime());
     }
+
+    private void setSteps() {
+        DAO dao = new DAO();
+        List<String> steps = dao.getStepID();
+        for (String step : steps ) {
+            txtStepId.addItem(step);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,20 +66,20 @@ public class ReportFilter extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        startDate = new com.toedter.calendar.JDateChooser();
+        txtStartDate = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        endDate = new com.toedter.calendar.JDateChooser();
+        txtEndDate = new com.toedter.calendar.JDateChooser();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        txtStepId = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        txtTimePeriod = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        txtEmpName = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        btnGenerate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -76,8 +91,8 @@ public class ReportFilter extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.GridLayout());
 
-        startDate.setDateFormatString("yyyy-MM-dd");
-        jPanel3.add(startDate);
+        txtStartDate.setDateFormatString("yyyy-MM-dd");
+        jPanel3.add(txtStartDate);
 
         jPanel1.add(jPanel3);
 
@@ -87,8 +102,8 @@ public class ReportFilter extends javax.swing.JFrame {
 
         jPanel4.setLayout(new java.awt.GridLayout());
 
-        endDate.setDateFormatString("yyyy-MM-dd");
-        jPanel4.add(endDate);
+        txtEndDate.setDateFormatString("yyyy-MM-dd");
+        jPanel4.add(txtEndDate);
 
         jPanel1.add(jPanel4);
 
@@ -97,31 +112,41 @@ public class ReportFilter extends javax.swing.JFrame {
         jLabel5.setText("Step ID");
         jPanel2.add(jLabel5);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel2.add(jComboBox1);
+        txtStepId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
+        jPanel2.add(txtStepId);
 
         jLabel6.setText("Time Period");
         jPanel2.add(jLabel6);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel2.add(jComboBox2);
+        txtTimePeriod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hourly (Default)", "Daily", "Weekly", "Monthly", "Yearly" }));
+        txtTimePeriod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimePeriodActionPerformed(evt);
+            }
+        });
+        jPanel2.add(txtTimePeriod);
 
         jLabel7.setText("Employee Name");
         jPanel2.add(jLabel7);
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel2.add(jComboBox3);
+        txtEmpName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel2.add(txtEmpName);
 
-        jButton1.setText("Cancel");
-        jPanel6.add(jButton1);
-
-        jButton2.setText("Generate Report");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnCancelActionPerformed(evt);
             }
         });
-        jPanel6.add(jButton2);
+        jPanel6.add(btnCancel);
+
+        btnGenerate.setText("Generate Report");
+        btnGenerate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btnGenerate);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,8 +165,8 @@ public class ReportFilter extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -150,12 +175,30 @@ public class ReportFilter extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
         // TODO add your handling code here:
-        
-       this.dispose();
-       new Report().setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+        String sDate = ((JTextField) txtStartDate.getDateEditor().getUiComponent()).getText();
+        String eDate = ((JTextField) txtEndDate.getDateEditor().getUiComponent()).getText();
+        String stepId = txtStepId.getSelectedItem().toString();
+        String aggTime = txtTimePeriod.getSelectedItem().toString();
+        String empName = txtEmpName.getSelectedItem().toString();
+        if ((sDate != null && !sDate.equals("")) && (eDate != null && !eDate.equals(""))
+                && !empName.equals("")) {
+            this.dispose();
+            new Report().setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(new JPanel(), "Select all fields!", "", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnGenerateActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void txtTimePeriodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimePeriodActionPerformed
+        System.out.println("hi");
+    }//GEN-LAST:event_txtTimePeriodActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,12 +237,8 @@ public class ReportFilter extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.toedter.calendar.JDateChooser endDate;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnGenerate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
@@ -210,6 +249,10 @@ public class ReportFilter extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
-    private com.toedter.calendar.JDateChooser startDate;
+    private javax.swing.JComboBox<String> txtEmpName;
+    private com.toedter.calendar.JDateChooser txtEndDate;
+    private com.toedter.calendar.JDateChooser txtStartDate;
+    private javax.swing.JComboBox<String> txtStepId;
+    private javax.swing.JComboBox<String> txtTimePeriod;
     // End of variables declaration//GEN-END:variables
 }
