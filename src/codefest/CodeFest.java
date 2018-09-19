@@ -26,7 +26,7 @@ public class CodeFest {
         readFromCSV CSV1 = new readFromCSV();
         DAO dao = new DAO();
         ArrayList<Shiftlist> s = CSV1.readFromCSV();
-        dao.addShiftToDB(s);
+        //dao.addShiftToDB(s);
         LocalDate date = java.time.LocalDate.now();
         String d = String.valueOf(date);
         System.out.println(d);

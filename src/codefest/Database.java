@@ -7,6 +7,7 @@ package codefest;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -15,7 +16,24 @@ import java.sql.DriverManager;
 class Database {
     
     public static Connection getConnection(){
+        String URL = "jdbc:mysql://localhost:3306/Codefest";
+        String username = "root";
+        String password = "Imesh@77";
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = (Connection) DriverManager.getConnection(URL,username, password);
+            return con;
+        }catch(ClassNotFoundException | SQLException ex){
+            System.out.println("Database.getConnection() Error ---> "+ex.getMessage());
+            return null;
+        }
+    }
     
-      return null;
+    public static void close(Connection con){
+        try{
+            con.close();
+        }catch(Exception ex){
+            
+        }
     }
 }
