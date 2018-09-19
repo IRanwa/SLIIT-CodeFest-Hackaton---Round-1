@@ -1,6 +1,8 @@
 package Frame;
 
 import codefest.DAO;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,8 @@ public class ReportFilter extends javax.swing.JFrame {
         setDatePicker();
         setSteps();
     }
+    
+    
 
     private void setDatePicker() {
         Calendar calendar = Calendar.getInstance();
@@ -53,6 +57,8 @@ public class ReportFilter extends javax.swing.JFrame {
             txtStepId.addItem(step);
         }
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -179,9 +185,33 @@ public class ReportFilter extends javax.swing.JFrame {
         // TODO add your handling code here:
         String sDate = ((JTextField) txtStartDate.getDateEditor().getUiComponent()).getText();
         String eDate = ((JTextField) txtEndDate.getDateEditor().getUiComponent()).getText();
-        String stepId = txtStepId.getSelectedItem().toString();
-        String aggTime = txtTimePeriod.getSelectedItem().toString();
+        //String stepId = txtStepId.getSelectedItem().toString();
+        //String aggTime = txtTimePeriod.getSelectedItem().toString();
         String empName = txtEmpName.getSelectedItem().toString();
+        
+        txtStepId.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                    String stepId = txtStepId.getSelectedItem().toString();
+                    
+                    if(stepId == null && stepId.equals("")){
+                        JOptionPane.showMessageDialog(new JPanel(), "Select Step ID", "", JOptionPane.ERROR_MESSAGE);
+                    }
+            }
+        });
+        
+        txtTimePeriod.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                String aggTime = txtTimePeriod.getSelectedItem().toString();
+                
+                if(aggTime == null && aggTime.equals("")){
+                    JOptionPane.showMessageDialog(new JPanel(), "Select Aggregated Time", "", JOptionPane.ERROR_MESSAGE);
+                }
+                
+            }
+        });
+        
         if ((sDate != null && !sDate.equals("")) && (eDate != null && !eDate.equals(""))
                 && !empName.equals("")) {
             this.dispose();
